@@ -3,6 +3,8 @@ package main
 import (
 	todo "MaksJash"
 	"MaksJash/pkg/handler"
+	"MaksJash/pkg/repository"
+	"MaksJash/pkg/service"
 	"log"
 )
 
@@ -10,10 +12,13 @@ import (
 
 func main() {
 
-	server := new(todo.Server)
-	router := new(handler.Handler) // Не знаю, в чем отличие между handler.Handler{}
+	rep := repository.NewRepository()
+	srvc := service.NewService(rep)
+	handler := handler.NewHandler(srvc)
 
-	if err := server.Run("9090", router.InitRoutes()); err != nil {
+	server := new(todo.Server)
+
+	if err := server.Run("9090", handler.InitRoutes()); err != nil {
 		log.Fatalf("Error while running the server: %s", err.Error()) // .Error() - приведение к строке
 	}
 

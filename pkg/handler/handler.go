@@ -1,8 +1,21 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"MaksJash/pkg/service"
 
-type Handler struct{}
+	"github.com/gin-gonic/gin"
+)
+
+type Handler struct {
+	services *service.Service // Как я понял - это для доступа к БД
+}
+
+// Конструктор
+func NewHandler(services *service.Service) *Handler {
+	return &Handler{
+		services: services,
+	}
+}
 
 // Инициализация роутов
 func (h *Handler) InitRoutes() *gin.Engine {
@@ -21,7 +34,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 
 		// Группа роутинга списков
-		lists := api.Group("/lists")
+		lists := api.Group("/lists") // Роуты: /api/lists
 		{
 			lists.GET("", h.getAlLists)
 			lists.POST("", h.createList)
