@@ -1,5 +1,7 @@
 package repository
 
+import "github.com/jmoiron/sqlx"
+
 // Тут работа с БД
 
 type Authorization interface {
@@ -15,6 +17,7 @@ type TodoItem interface {
 type Repository struct {
 	// Это композитная структура. Благодаря такому подходу можно управлять разными интерфейсами
 	// (по факту - сервисами приложений) из 1-го места
+	// (по факту - сервисами приложений) из 1-го места
 	// Благодаря такому встраиванию, методы интерфейсов будут доступны прямо из структуры
 	Authorization
 	TodoItem
@@ -22,6 +25,6 @@ type Repository struct {
 }
 
 // Конструктор
-func NewRepository() *Repository {
+func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{}
 }
