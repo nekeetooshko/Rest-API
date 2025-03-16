@@ -21,13 +21,13 @@ func main() {
 	logrus.SetFormatter(&logrus.JSONFormatter{PrettyPrint: true})
 
 	if err := initConfig(); err != nil {
-		logrus.Fatalf("Error with config initialization: %s", err.Error()) // .Error() - приведение к строке
+		logrus.Errorf("Error with config initialization: %s", err.Error()) // .Error() - приведение к строке
 	}
 
 	// Ищет .env файл в текущей директории, если параметрами не переданы другие директории
 	// И грузит себе во внутрянку
 	if err := godotenv.Load(); err != nil {
-		logrus.Fatalf("Error with loading env variables: %s", err.Error())
+		logrus.Errorf("Error with loading env variables: %s", err.Error())
 	}
 
 	db, err := repository.NewPostgresDb(repository.Config{
@@ -40,7 +40,7 @@ func main() {
 	})
 
 	if err != nil {
-		logrus.Fatalf("Error with database configuration: %s", err.Error())
+		logrus.Errorf("Error with database configuration: %s", err.Error())
 	}
 
 	rep := repository.NewRepository(db)
@@ -50,7 +50,7 @@ func main() {
 	server := new(todo.Server)
 
 	if err := server.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
-		logrus.Fatalf("Error while running the server: %s", err.Error())
+		logrus.Errorf("Error while running the server: %s", err.Error())
 	}
 
 }
@@ -60,7 +60,7 @@ func initConfig() error {
 
 	viper.AddConfigPath("configs") // Указание директории, где будет искать файл конфига
 	viper.SetConfigName("config")  // Имя файла конфига, что нужно найти
-	viper.SetConfigType("toml")    // Расширение для файла, что мы ищем
+	viper.SetConfigType("yaml")    // Расширение для файла, что мы ищем
 
 	return viper.ReadInConfig()
 }

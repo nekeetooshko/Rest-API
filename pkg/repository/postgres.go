@@ -8,6 +8,14 @@ import (
 
 // Тут логика подключения БД, и имена таблиц в константах (нахуя то)
 
+const (
+	usersTable      = "users"
+	todoListsTable  = "todo_lists"
+	usersListsTable = "users_lists"
+	todoItemsTable  = "todo_items"
+	listsItemsTable = "lists_items"
+)
+
 // БДшный конфиг
 type Config struct {
 	Host     string

@@ -1,11 +1,15 @@
 package service
 
-import "MaksJash/pkg/repository"
+import (
+	todo "MaksJash"
+	"MaksJash/pkg/repository"
+)
 
 // Тут всякая бизнес - логика
 
 // Отвечает за авторизацию
 type Authorization interface {
+	CreateUser(user todo.User) (int, error) // Создает пользователя, возвращает его id
 }
 
 // Отвечает за списки
@@ -29,5 +33,7 @@ type Service struct {
 // Конструктор
 func NewService(rep *repository.Repository) *Service {
 	// Т.к. сервисы обращаются к БД - нужно передать репозиторий, ведь работа с БД ложится именно на его плечи
-	return &Service{}
+	return &Service{
+		Authorization: newAuthService(rep.Authorization),
+	}
 }

@@ -1,10 +1,15 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	todo "MaksJash"
+
+	"github.com/jmoiron/sqlx"
+)
 
 // Тут работа с БД
 
 type Authorization interface {
+	CreateUser(user todo.User) (int, error)
 }
 
 type TodoList interface {
@@ -26,5 +31,7 @@ type Repository struct {
 
 // Конструктор
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{}
+	return &Repository{
+		Authorization: newAuthPostgres(db),
+	}
 }
