@@ -9,16 +9,15 @@ import (
 
 // Отвечает за авторизацию
 type Authorization interface {
-	CreateUser(user todo.User) (int, error) // Создает пользователя, возвращает его id
+	CreateUser(user todo.User) (int, error)                  // Создает пользователя, возвращает его id
+	GenerateToken(username, password string) (string, error) // Возвращает сгенерированный токен
 }
 
 // Отвечает за списки
-type TodoList interface {
-}
+type TodoList interface{}
 
 // Отвечает за элементы списков
-type TodoItem interface {
-}
+type TodoItem interface{}
 
 // Собирает интерфейсы в 1-м месте
 type Service struct {
