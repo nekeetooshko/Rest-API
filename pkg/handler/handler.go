@@ -34,7 +34,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 
 		// Группа роутинга списков
-		lists := api.Group("/lists") // Роуты: /api/lists
+		lists := api.Group("/lists", h.userIdentity) // userIdentity - это ПОшка для всех роутов
 		{
 			lists.GET("", h.getAlLists)
 			lists.POST("", h.createList)

@@ -9,6 +9,7 @@ import (
 
 const (
 	authorizationHeader string = "Authorization"
+	userCtx             string = "userId"
 )
 
 // Идентификация борна (пользователя, вообще-то)
@@ -28,5 +29,14 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
-	// TODO: parse token
+	// Парсим токен
+	id, err := h.services.Authorization.ParseToken(headerParts[1])
+	if err != nil {
+		newErrorResponce(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	// Если все ок - пишем значение id в контекст, дабы иметь к нему доступ в следующих ручках
+	c.Set(userCtx, id)
+
 }
