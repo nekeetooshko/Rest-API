@@ -11,6 +11,7 @@ import (
 type Authorization interface {
 	CreateUser(user todo.User) (int, error)                  // Создает пользователя, возвращает его id
 	GenerateToken(username, password string) (string, error) // Возвращает сгенерированный токен
+	ParseToken(token string) (int, error)                    // Возвращает id пользователя по токену
 }
 
 // Отвечает за списки

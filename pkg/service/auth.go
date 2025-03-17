@@ -4,6 +4,7 @@ import (
 	todo "MaksJash"
 	"MaksJash/pkg/repository"
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"time"
 
@@ -42,6 +43,7 @@ func (s *AuthService) CreateUser(user todo.User) (int, error) {
 	return s.rep.CreateUser(user)
 }
 
+// Вытаскивает юзера, генерит токен и возвращает его подписанным
 func (s *AuthService) GenerateToken(username, password string) (string, error) {
 
 	// Вытаскиваем пользователя
@@ -63,6 +65,37 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 	})
 
 	return token.SignedString([]byte(signingKey)) // Подписываем токен заготовленным ключом
+
+}
+
+// Парсит переданный токен
+func (s *AuthService) ParseToken(accessToken string) (int, error) {
+
+	// Парсит токен, и проверяет его подлинность
+	token, err := jwt.ParseWithClaims(accessToken, &customTokenClaims{}, func(t *jwt.Token) (any, error) {
+
+		// 1 - сам токен, 2 - куда его распарсить, 3 - получение ключа для проверки подписи
+
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("Invalid signing method")
+		}
+
+		return []byte(signingKey), nil
+
+	})
+
+	if err != nil {
+		return 0, err
+	}
+
+	// Извлечение данных из токена
+	claims, ok := token.Claims.(*customTokenClaims) // .(*customTokenClaims) - приведение обычных token.Claims
+	// к кастомным
+	if !ok {
+		return 0, errors.New("Token claims are not of type *customTokenClaims")
+	}
+
+	return claims.UserId, nil
 
 }
 
