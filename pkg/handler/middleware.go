@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -39,4 +40,21 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	// Если все ок - пишем значение id в контекст, дабы иметь к нему доступ в следующих ручках
 	c.Set(userCtx, id)
 
+}
+
+// Достаем id пользователя из контекста
+func getUserId(c *gin.Context) (int, error) {
+	id, ok := c.Get(userCtx)
+	if !ok {
+		newErrorResponce(c, http.StatusInternalServerError, "User id not found")
+		return 0, errors.New("User id not found")
+	}
+
+	idInt, ok := id.(int)
+	if !ok {
+		newErrorResponce(c, http.StatusInternalServerError, "Cant convert id to int")
+		return 0, errors.New("Cant convert id to int")
+	}
+
+	return idInt, nil
 }

@@ -15,7 +15,12 @@ type Authorization interface {
 }
 
 // Отвечает за списки
-type TodoList interface{}
+type TodoList interface {
+	Create(userId int, list todo.TodoList) (int, error)      // Принимает id юзера и список, возвр. - id списка
+	GetAll(userId int) ([]todo.TodoList, error)              // Принимает id юзера и возвр. все его списки
+	GetListById(user_id, list_id int) (todo.TodoList, error) // Возвращает список по переданному ID
+
+}
 
 // Отвечает за элементы списков
 type TodoItem interface{}
@@ -35,5 +40,6 @@ func NewService(rep *repository.Repository) *Service {
 	// Т.к. сервисы обращаются к БД - нужно передать репозиторий, ведь работа с БД ложится именно на его плечи
 	return &Service{
 		Authorization: newAuthService(rep.Authorization),
+		TodoList:      NewTodoListService(rep.TodoList),
 	}
 }
