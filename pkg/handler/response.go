@@ -11,6 +11,11 @@ type Error struct {
 	ErrMsg string `json:"message"`
 }
 
+// Типа удобной структуры для ответа
+type statusResponse struct {
+	Status string `json:"status"`
+}
+
 // Вернет ошибку и остановит все последующие ручки
 func newErrorResponce(c *gin.Context, statusCode int, message string) {
 

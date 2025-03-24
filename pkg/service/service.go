@@ -16,10 +16,11 @@ type Authorization interface {
 
 // Отвечает за списки
 type TodoList interface {
-	Create(userId int, list todo.TodoList) (int, error)      // Принимает id юзера и список, возвр. - id списка
-	GetAll(userId int) ([]todo.TodoList, error)              // Принимает id юзера и возвр. все его списки
-	GetListById(user_id, list_id int) (todo.TodoList, error) // Возвращает список по переданному ID
-
+	Create(userId int, list todo.TodoList) (int, error)            // Принимает id юзера и список, возвр. - id списка
+	GetAll(userId int) ([]todo.TodoList, error)                    // Принимает id юзера и возвр. все его списки
+	GetListById(user_id, list_id int) (todo.TodoList, error)       // Возвращает список по переданному ID
+	DeleteListById(user_id, list_id int) error                     // Удаляет список по переданному ID
+	Update(user_id, list_id int, input todo.UpdateListInput) error // Обновит список
 }
 
 // Отвечает за элементы списков
