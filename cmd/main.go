@@ -5,7 +5,10 @@ import (
 	"MaksJash/pkg/handler"
 	"MaksJash/pkg/repository"
 	"MaksJash/pkg/service"
+	"context"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -49,8 +52,25 @@ func main() {
 
 	server := new(todo.Server)
 
-	if err := server.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
-		logrus.Errorf("Error while running the server: %s", err.Error())
+	go func() {
+		if err := server.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
+			logrus.Errorf("Error while running the server: %s", err.Error())
+		}
+	}()
+
+	// Gracefull shutdown
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	// Кладем сервер
+	if err := server.Shutdown(context.Background()); err != nil {
+		logrus.Errorf("Error happend while the server is shutting down: %s", err.Error())
+	}
+
+	// Кладем БД
+	if err := db.Close(); err != nil {
+		logrus.Errorf("Error happend while the db is shutting down: %s", err.Error())
 	}
 
 }
