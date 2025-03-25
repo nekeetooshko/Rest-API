@@ -30,11 +30,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	}
 
 	// Группа роутинга для всего (и списков и элементов)
-	api := router.Group("/api")
+	api := router.Group("/api", h.userIdentity)
 	{
 
 		// Группа роутинга списков
-		lists := api.Group("/lists", h.userIdentity) // userIdentity - это ПОшка для всех роутов
+		lists := api.Group("/lists") // userIdentity - это ПОшка для всех роутов
 		{
 			lists.GET("", h.getAlLists)
 			lists.POST("", h.createList)
@@ -47,10 +47,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			{
 				items.GET("/", h.getAlItems)
 				items.POST("/", h.createItem)
-				items.GET("/:item_id", h.getCertainItem)
-				items.PUT("/:item_id", h.updateItem)
-				items.DELETE("/:item_id", h.deleteItem)
 			}
+		}
+
+		items := api.Group("items")
+		{
+			items.GET("/:id", h.getCertainItem)
+			items.PUT("/:id", h.updateItem)
+			items.DELETE("/:id", h.deleteItem)
 		}
 	}
 	return router

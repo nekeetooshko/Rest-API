@@ -24,7 +24,13 @@ type TodoList interface {
 }
 
 // Отвечает за элементы списков
-type TodoItem interface{}
+type TodoItem interface {
+	Create(user_id, list_id int, item todo.TodoItem) (int, error)
+	GetAll(user_id, list_id int) ([]todo.TodoItem, error)
+	GetItemById(user_id, item_id int) (todo.TodoItem, error)
+	Delete(user_id, item_id int) error
+	Update(user_id, item_id int, input todo.UpdateItemInput) error
+}
 
 // Собирает интерфейсы в 1-м месте
 type Service struct {
@@ -42,5 +48,6 @@ func NewService(rep *repository.Repository) *Service {
 	return &Service{
 		Authorization: newAuthService(rep.Authorization),
 		TodoList:      NewTodoListService(rep.TodoList),
+		TodoItem:      NewTodoItemService(rep.TodoItem, rep.TodoList),
 	}
 }

@@ -15,10 +15,10 @@ type UsersList struct {
 }
 
 type TodoItem struct {
-	Id          int    `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Done        bool   `json:"done"`
+	Id          int    `json:"id" db:"id"`
+	Title       string `json:"title" db:"title" binding:"required"`
+	Description string `json:"description" db:"description"`
+	Done        bool   `json:"done" db:"done"`
 }
 type ListsItem struct {
 	Id     int
@@ -36,6 +36,20 @@ type UpdateListInput struct {
 func (u *UpdateListInput) Validate() error {
 
 	if u.Description == nil && u.Title == nil {
+		return errors.New("Updated structure has no values")
+	}
+	return nil
+}
+
+type UpdateItemInput struct {
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+	Done        *bool   `json:"done"`
+}
+
+func (u *UpdateItemInput) Validate() error {
+
+	if u.Description == nil && u.Title == nil && u.Done == nil {
 		return errors.New("Updated structure has no values")
 	}
 	return nil
