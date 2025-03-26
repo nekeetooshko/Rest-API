@@ -9,7 +9,19 @@ import (
 )
 
 // Ручки для предметов списков
-
+// @Summary Create new item
+// @Security ApiKeyAuth
+// @Tags Items endpoints
+// @Description Create new item by user_id & list_id
+// @ID create-new-item
+// @Accept  json
+// @Produce  json
+// @Param input body todo.TodoItem true "New item"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists/:id/items [post]
 func (h *Handler) createItem(c *gin.Context) {
 
 	// Id польз-ля
@@ -44,6 +56,18 @@ func (h *Handler) createItem(c *gin.Context) {
 
 }
 
+// @Summary Return all items
+// @Security ApiKeyAuth
+// @Tags Items endpoints
+// @Description Return all items by list_id
+// @ID return-all-items
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} []todo.TodoItem
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists/:id/items [get]
 func (h *Handler) getAlItems(c *gin.Context) {
 
 	user_id, err := getUserId(c)

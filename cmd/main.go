@@ -16,6 +16,17 @@ import (
 	"github.com/spf13/viper"
 )
 
+// @title Test Rest-API
+// @version 1.0
+// @description Test Rest-API from Maksim Zhashkevich YouTube channel
+
+// @host localhost:9090
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
 // Запуск проги
 
 func main() {

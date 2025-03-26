@@ -4,6 +4,11 @@ import (
 	"MaksJash/pkg/service"
 
 	"github.com/gin-gonic/gin"
+
+	swaggerfiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+
+	_ "MaksJash/docs"
 )
 
 type Handler struct {
@@ -21,6 +26,8 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 
 	router := gin.New() // Без ПО
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	// Группа роутинга для авторизации/аутентификации
 	auth := router.Group("/auth")

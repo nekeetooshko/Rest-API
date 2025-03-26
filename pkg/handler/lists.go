@@ -15,6 +15,18 @@ type getAllListsResponse struct {
 
 // Ручки для списков
 
+// @Summary Get all lists
+// @Security ApiKeyAuth
+// @Tags Lists endpoints
+// @Description Return all lists by user id
+// @ID get-all-lists
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} []todo.TodoList
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists [get]
 func (h *Handler) getAlLists(c *gin.Context) {
 
 	// Достаем id пользователя, чтобы по нему вытащить все списки
@@ -60,6 +72,19 @@ func (h *Handler) getCertainList(c *gin.Context) {
 	c.JSON(http.StatusOK, list)
 }
 
+// @Summary Create list
+// @Security ApiKeyAuth
+// @Tags Lists endpoints
+// @Description Creates a new list instance
+// @ID create-list
+// @Accept  json
+// @Produce  json
+// @Param input body todo.TodoList true "list info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/lists [post]
 func (h *Handler) createList(c *gin.Context) {
 
 	// Достаем id пользователя
