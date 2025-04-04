@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  todo-app:
+    # Будет искать приложения для dockerfile, на основе которого соберет image (в текущей директории)
+    build: ./ 
+    # Описание команд для контейнера при его запуске
+    command: ./todo-app # Будет запускать скомпилированный бинарник
+    ports: 
+      - 8000:8000
+    # Указывает, от кого зависит. Пока не будут запущены контейнеры-зависимости, не будет запущен и текущий
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=qwerty # Свиснул из .env файла
+
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgres/data
+    environment:
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - 5436:5432
+
+  

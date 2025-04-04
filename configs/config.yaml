@@ -2,7 +2,15 @@ port: "9090"
 
 db:
   username: "postgres"
-  host:     "localhost"
-  port:     "5436"
+  # Раньше было так:
+  # host:     "localhost"
+  # port:     "5436"
+  # Т.к. запускалось все локально. 
+
+  # Теперь же вместо host:"localhost" host:"db" (название из docker compose)
+  # С портом для БД сэйм
+
+  host:     "db"
+  port:     "5432"
   dbname:   "postgres"
   sslmode:  "disable"
